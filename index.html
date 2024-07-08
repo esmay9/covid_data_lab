@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <title>Washington COVID Data</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-
-    <!-- Including the Mapbox GL CSS file -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
-
-    <!-- Including the Mapbox GL JS file -->
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
 
     <style>
-        /* CSS styles for heading and paragraphs */
         h2,
         h3 {
             margin: 10px;
@@ -27,10 +21,6 @@
         p {
             margin: 10px;
         }
-
-        /**
-        * Create a position for the map
-        * on the page */
         #map {
             position: absolute;
             top: 0;
@@ -40,11 +30,6 @@
             width: 100%;
             height: 100%;
         }
-
-        /**
-        * Set rules for how the map overlays
-        * (information box and legend) will be displayed
-         on the page. */
         .map-overlay {
             position: absolute;
             bottom: 0;
@@ -58,14 +43,12 @@
             overflow: auto;
             border-radius: 3px;
         }
-
         #features {
             top: 0;
             height: 100px;
             margin-top: 20px;
             width: 250px;
         }
-
         #legend {
             padding: 10px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -74,7 +57,6 @@
             margin-bottom: 40px;
             width: 150px;
         }
-
         .legend-key {
             display: inline-block;
             border-radius: 20%;
@@ -82,14 +64,12 @@
             height: 10px;
             margin-right: 5px;
         }
-
         .mapboxgl-canvas-container.mapboxgl-interactive,
         .mapboxgl-ctrl-group button.mapboxgl-ctrl-compass {
             cursor: unset;
         }
     </style>
 </head>
-
 <body>
     <div id="map"></div>
     <div class='map-overlay' id='features'>
@@ -101,16 +81,13 @@
     <div class='map-overlay' id='legend'></div>
     <script>
         // initialize basemmap
-        mapboxgl.accessToken =
-            'pk.eyJ1IjoiZXNtYXktOSIsImEiOiJjbHlkZHhmZHMwM3Z6MmlwbXZ2dW95djYyIn0.A_U4RHLqT0g7uBHk0XEefQ';
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZXNtYXktOSIsImEiOiJjbHlkZHhmZHMwM3Z6MmlwbXZ2dW95djYyIn0.A_U4RHLqT0g7uBHk0XEefQ';
         const map = new mapboxgl.Map({
             container: 'map', // container ID
-            style: 'mapbox://styles/mapbox/light-v10', // style URL
-            zoom: 5, // starting zoom
-            center: [47.7511, 120.7401] // starting center
+            style: 'mapbox://styles/mapbox/light-v10',
+            zoom: 5,
+            center: [-120.7401, 47.7511]
         });
-
-        // load data and add as layer
         async function geojsonFetch() {
             let response = await fetch('assets/wa-covid-data-102521.geojson');
             let covid_data = await response.json();
@@ -120,11 +97,10 @@
                     type: 'geojson',
                     data: covid_data
                 });
-
                 map.addLayer({
                     'id': 'covid_data_layer',
                     'type': 'fill',
-                    'source': covid_data',
+                    'source': 'covid_data',
                     'paint': {
                         'fill-color': [
                             'step',
@@ -149,7 +125,6 @@
                         'fill-opacity': 0.7,
                     }
                 });
-
                 const layers = [
                     '0-9',
                     '10-19',
@@ -170,11 +145,8 @@
                     '#BD002670',
                     '#80002670'
                 ];
-
-                // create legend
                 const legend = document.getElementById('legend');
                 legend.innerHTML = "<b>Cases per 10,000 People</b>";
-
 
                 layers.forEach((layer, i) => {
                     const color = colors[i];
@@ -190,21 +162,18 @@
                     legend.appendChild(item);
                 });
             });
-
-            map.on('mousemove', ({point}) => {
-                const state = map.queryRenderedFeatures(point, {
+            map.on('mousemove', function (e) {
+                const state = map.queryRenderedFeatures(e.point, {
                     layers: ['covid_data_layer']
                 });
                 document.getElementById('text-description').innerHTML = state.length ?
-                    `<h3>${state[0].properties.name}</h3><p><strong><em>${state[0].properties.casePer10k}</strong> cases per 10,000 people</em></p>` :
-                    `<p>Hover over a state!</p>`;
+                    `<h3>${state[0].properties.name}</h3><p><strong><em>${state[0].properties.casePer10k}</strong> Cases per 10,000 people</em></p>` :
+                    `<p>Hover over a county!</p>`;
             });
         }
 
         // Call the function to fetch GeoJSON data and load the map
         geojsonFetch();
     </script>
-
 </body>
-
 </html>
