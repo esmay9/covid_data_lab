@@ -113,7 +113,7 @@
         // load data and add as layer
         async function geojsonFetch() {
             let response = await fetch('assets/wa-covid-data-102521.geojson');
-            let state_data = await response.json();
+            let covid_data = await response.json();
 
             map.on('load', function loadingData() {
                 map.addSource('covid_data', {
@@ -173,7 +173,7 @@
 
                 // create legend
                 const legend = document.getElementById('legend');
-                legend.innerHTML = "<b>Cases per 10,000 People</b><br><br>";
+                legend.innerHTML = "<b>Cases per 10,000 People</b>";
 
 
                 layers.forEach((layer, i) => {
