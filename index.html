@@ -85,9 +85,10 @@
         const map = new mapboxgl.Map({
             container: 'map', // container ID
             style: 'mapbox://styles/mapbox/light-v10',
-            zoom: 7,
+            zoom: 6,
             center: [-120.7401, 47.7511]
         });
+
         async function geojsonFetch() {
             let response = await fetch('assets/wa-covid-data-102521.geojson');
             let covid_data = await response.json();
@@ -97,6 +98,7 @@
                     type: 'geojson',
                     data: covid_data
                 });
+
                 map.addLayer({
                     'id': 'covid_data_layer',
                     'type': 'fill',
@@ -116,6 +118,7 @@
                         'fill-opacity': 0.7,
                     }
                 });
+
                 const layers = [
                     '0-499',
                     '500-999',
@@ -124,10 +127,11 @@
                 ];
                 const colors = [
                     '#FFEDA070',
-                    '#FD8D3C70',
-                    '#BD002670',
-                    '#80002670'
+                    '#FED97670',
+                    '#FEB24C70',
+                    '#FD8D3C70'
                 ];
+
                 const legend = document.getElementById('legend');
                 legend.innerHTML = "<b>Cases per 10,000 People</b>";
 
@@ -145,6 +149,7 @@
                     legend.appendChild(item);
                 });
             });
+
             map.on('mousemove', function (e) {
                 const state = map.queryRenderedFeatures(e.point, {
                     layers: ['covid_data_layer']
