@@ -8,8 +8,7 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
 
     <style>
-        h2,
-        h3 {
+        h2, h3 {
             margin: 10px;
             font-size: 18px;
         }
@@ -80,7 +79,6 @@
     </div>
     <div class='map-overlay' id='legend'></div>
     <script>
-        // initialize basemmap
         mapboxgl.accessToken = 'pk.eyJ1IjoiZXNtYXktOSIsImEiOiJjbHlkZHhmZHMwM3Z6MmlwbXZ2dW95djYyIn0.A_U4RHLqT0g7uBHk0XEefQ';
         const map = new mapboxgl.Map({
             container: 'map', // container ID
@@ -107,12 +105,15 @@
                         'fill-color': [
                             'step',
                             ['get', 'casePer10k'],
-                            '#FFEDA0',   
-                            500,          
-                            '#FED976',   
-                            1000,          
-                            '#FEB24C',  
-                            1500
+                            '#FFEDA0',   // stop_output_0
+                            500,         // stop_input_0
+                            '#FED976',   // stop_output_1
+                            1000,        // stop_input_1
+                            '#FEB24C',   // stop_output_2
+                            1500,        // stop_input_2
+                            '#FD8D3C',   // stop_output_3
+                            2000,        // stop_input_3
+                            "#FC4E2A"    // stop_output_4
                         ],
                         'fill-outline-color': '#BBBBBB',
                         'fill-opacity': 0.7,
@@ -123,13 +124,15 @@
                     '0-499',
                     '500-999',
                     '1000-1499',
-                    '1500 and more'
+                    '1500-1999',
+                    '2000 and more'
                 ];
                 const colors = [
                     '#FFEDA070',
                     '#FED97670',
                     '#FEB24C70',
-                    '#FD8D3C70'
+                    '#FD8D3C70',
+                    '#FC4E2A70'
                 ];
 
                 const legend = document.getElementById('legend');
@@ -160,7 +163,6 @@
             });
         }
 
-        // Call the function to fetch GeoJSON data and load the map
         geojsonFetch();
     </script>
 </body>
